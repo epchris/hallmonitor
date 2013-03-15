@@ -24,15 +24,16 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "bin/example.rb",
+    "hallmonitor.gemspec",
     "lib/hallmonitor.rb",
     "lib/hallmonitor/event.rb",
+    "lib/hallmonitor/gauge_event.rb",
     "lib/hallmonitor/monitored.rb",
     "lib/hallmonitor/outputter.rb",
     "lib/hallmonitor/outputters/iooutputter.rb",
     "lib/hallmonitor/outputters/statsd_outputter.rb",
     "lib/hallmonitor/timed_event.rb",
     "lib/hallmonitor/version.rb",
-    "test/hallmonitor_test.rb",
     "test/helper.rb",
     "test/monitored_test.rb"
   ]
