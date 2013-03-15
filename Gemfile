@@ -1,9 +1,9 @@
 source "http://rubygems.org"
 
 gem 'json'
-gem 'statsd-ruby'
 
 group :development do
+  gem 'statsd-ruby'
   gem "shoulda"
   gem "rdoc"
   gem "bundler"
