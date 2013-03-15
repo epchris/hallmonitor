@@ -14,10 +14,10 @@ module Hallmonitor
     # a base event from the passed in param
     # If the parameter is a #Hallmonitor::Event, it will be emitted as is.
     # Otherwise, a new Hallmonitor::Event will be created with the parameter and emitted.
-    def emit(event = nil, data=nil)
+    def emit(event = nil)
       to_emit = self;
       if(!event.nil?)
-        to_emit = event.kind_of?(Hallmonitor::Event) ? event : Hallmonitor::Event.new(event, data)
+        to_emit = event.kind_of?(Hallmonitor::Event) ? event : Hallmonitor::Event.new(event)
       end
       
       # If we were given a block, then we want to execute that
@@ -30,8 +30,8 @@ module Hallmonitor
 
     ##
     # Executes and times a block of code and emits a Hallmonitor::TimedEvent
-    def watch(name, data=nil)
-      event = Hallmonitor::TimedEvent.new(name, data)
+    def watch(name)
+      event = Hallmonitor::TimedEvent.new(name)
       event.start = Time.now
       yield(event)
       event.stop = Time.now

@@ -15,8 +15,10 @@ module Hallmonitor
       def process(event)
         if(event.respond_to?(:duration))
           @statsd.timing(event.name, event.duration)
+        elsif(event.respond_to?(:value))
+          @statsd.guage(event.name, event.value)
         else
-          @statsd.increment(event.name)
+          @statsd.count(event.name, event.count)
         end
       end
 

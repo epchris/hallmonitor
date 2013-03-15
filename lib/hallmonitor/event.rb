@@ -5,11 +5,10 @@ module Hallmonitor
   class Event
     include Hallmonitor::Monitored
     
-    attr_accessor :name, :time, :data, :count
+    attr_accessor :name, :time, :count
     
-    def initialize(name, count=1, data=nil)
+    def initialize(name, count=1)
       @name = name
-      @data = data
       @time = Time.now
       @count = count
     end
@@ -17,7 +16,6 @@ module Hallmonitor
     def to_json(*a)
       {
         name: @name,
-        data: @data,
         time: @time,
         count: @count
       }.to_json(*a)

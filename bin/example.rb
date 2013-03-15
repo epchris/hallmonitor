@@ -11,7 +11,7 @@ class Foo
   def bar
     # Emit 100 events
     100.times do
-      emit("event", "This is data")
+      emit("event")
     end
   end
 
