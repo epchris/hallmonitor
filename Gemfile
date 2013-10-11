@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+gemspec
+
 gem 'json'
 
 group :development do
