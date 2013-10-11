@@ -1,6 +1,10 @@
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'hallmonitor'
 require 'hallmonitor/outputters/iooutputter'
 require 'hallmonitor/outputters/statsd_outputter'
+require 'pry'
 
 Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
 Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
@@ -8,10 +12,19 @@ Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::StatsdOutputter.ne
 class Foo
   include Hallmonitor::Monitored
 
-  def bar
+  def do_something
+    sleep_time = (Random.rand * 20).floor
+    puts "Sleeping for #{sleep_time} seconds"
+    sleep(sleep_time)
+  end
+  timer_for :do_something
+  count_for :do_something
+
+  def emit_events(count=30)
     # Emit 100 events
-    100.times do
+    count.times do
       emit("event")
+      sleep(1)
     end
   end
 
@@ -22,18 +35,4 @@ class Foo
   end
 end
 
-# Simple event with name
-event = Hallmonitor::Event.new("simple")
-event.emit
-
-# Adding data to a simple event
-event = Hallmonitor::Event.new("simple")
-event.data = "FOOO"
-event.emit
-
-# Using a class that's monitored
-foo = Foo.new
-foo.bar
-
-# Using a timed event
-foo.time_me
+binding.pry

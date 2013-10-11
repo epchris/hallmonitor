@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency("shoulda", [">= 0"])
   s.add_development_dependency("rdoc", [">= 0"])
   s.add_development_dependency("bundler", ["~> 1.3"])
+  s.add_development_dependency("pry-debugger", [">= 0"])
 end
