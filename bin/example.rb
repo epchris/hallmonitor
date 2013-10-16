@@ -7,15 +7,15 @@ require 'hallmonitor/outputters/statsd_outputter'
 require 'pry'
 
 Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
-Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
+Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "graphite.demo.transis.net")
 
 class Foo
   include Hallmonitor::Monitored
 
   def do_something
-    sleep_time = (Random.rand * 20).floor
-    puts "Sleeping for #{sleep_time} seconds"
-    sleep(sleep_time)
+    sleep_time_ms = ((Random.rand * 100).floor) * 2
+    puts "Sleeping for #{sleep_time_ms} milliseconds"
+    sleep(sleep_time_ms / 1000.0)
   end
   timer_for :do_something
   count_for :do_something
