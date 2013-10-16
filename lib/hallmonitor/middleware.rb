@@ -9,7 +9,7 @@ module Hallmonitor
     def call(env)
       request = Rack::Request.new(env)
       @event_base_name = "http.#{request.path_info.gsub('/', '.')}.#{request.request_method}"
-      if request.path_info.match(/^\/?assets/)
+      if !request.path_info.match(/^\/?assets/)
         @event = Hallmonitor::TimedEvent.new("#{@event_base_name}.response_time")
         @event.start = Time.now
       else 
