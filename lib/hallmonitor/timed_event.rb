@@ -2,9 +2,15 @@ module Hallmonitor
   class TimedEvent < Event
     attr_accessor :start, :stop
 
-    # Reports duration of this timed even in ms
+    # Duration, should be set in ms, will take precedence over
+    # calculating via start and stop times
+    attr_writer :duration
+
+    # Reports duration of this timed event in ms
     def duration
-      if @start && @stop
+      if @duration
+        @duration
+      elsif @start && @stop
         (@stop - @start) * 1000
       end
     end
