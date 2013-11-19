@@ -2,6 +2,11 @@ module Hallmonitor
   class TimedEvent < Event
     attr_accessor :start, :stop
 
+    def initialize(name, duration=nil)
+      super(name)
+      @duration = duration
+    end
+
     # Duration, should be set in ms, will take precedence over
     # calculating via start and stop times
     attr_writer :duration
