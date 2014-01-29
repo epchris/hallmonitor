@@ -16,7 +16,7 @@ module Hallmonitor
         if(event.respond_to?(:duration))
           @statsd.timing(event.name, event.duration)
         elsif(event.respond_to?(:value))
-          @statsd.guage(event.name, event.value)
+          @statsd.gauge(event.name, event.value)
         else
           @statsd.count(event.name, event.count)
         end
