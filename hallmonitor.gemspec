@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   
   s.add_runtime_dependency("json", [">= 0"])
   s.add_runtime_dependency("statsd-ruby", [">= 0"])
-  s.add_development_dependency("shoulda", [">= 0"])
+  s.add_development_dependency("rspec", [">= 2.14"])
   s.add_development_dependency("rdoc", [">= 0"])
   s.add_development_dependency("bundler", ["~> 1.3"])
   s.add_development_dependency("pry-debugger", [">= 0"])

@@ -2,14 +2,10 @@
 
 require 'rubygems'
 require 'bundler/gem_tasks'
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = true
-end
 
-task :default => :test
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|

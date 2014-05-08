@@ -65,9 +65,10 @@ module Hallmonitor
     def watch(name)
       event = Hallmonitor::TimedEvent.new(name)
       event.start = Time.now
-      yield(event)
+      retval = yield(event)
       event.stop = Time.now
       emit(event)
+      retval
     end
   end
 end
