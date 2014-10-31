@@ -20,12 +20,13 @@ Gem::Specification.new do |s|
   s.files = `git ls-files`.split($/)
   s.test_files = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
-  
+
   s.add_runtime_dependency("json", [">= 0"])
   s.add_runtime_dependency("statsd-ruby", [">= 0"])
   s.add_development_dependency("rspec", [">= 2.14"])
   s.add_development_dependency("rdoc", [">= 0"])
   s.add_development_dependency("bundler", ["~> 1.3"])
-  s.add_development_dependency("pry-debugger", [">= 0"])
+  s.add_development_dependency("pry-byebug", [">= 0"])
   s.add_development_dependency("rake", [">= 0"])
+  s.add_development_dependency("yard", [">= 0"])
 end

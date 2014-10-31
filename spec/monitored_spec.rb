@@ -4,30 +4,34 @@ class Thing
   include Hallmonitor::Monitored
 end
 
+RSpec::Matchers.define :an_event_with_name do |expected_name|
+  match{ |actual| actual.name == expected_name}
+end
+
 describe Hallmonitor::Monitored do
   subject {Thing.new}
 
-  describe "#watch" do 
+  describe "#watch" do
     let(:retval) {"Hello World"}
     let(:name) {"foo"}
-    before do 
-      expect(Hallmonitor::Outputter).to receive(:output).with{|x|x.name == name}
+    before do
+      expect(Hallmonitor::Outputter).to receive(:output).with(an_event_with_name(name))
     end
-    it "should return the value the block returns" do 
-      value = subject.watch(name) do 
+    it "should return the value the block returns" do
+      value = subject.watch(name) do
         retval
       end
       expect(value).to eq(retval)
     end
   end
 
-  describe "#emit" do 
-    describe "with a string parameter" do 
+  describe "#emit" do
+    describe "with a string parameter" do
       let(:name) {"foo"}
-      before do 
-        expect(Hallmonitor::Outputter).to receive(:output).with{|x|x.name == name}
+      before do
+        expect(Hallmonitor::Outputter).to receive(:output).with(an_event_with_name(name))
       end
-      
+
       it "should emit an event with the passed in name" do
         subject.emit(name)
       end
@@ -43,16 +47,16 @@ describe Hallmonitor::Monitored do
         end
         expect(var).to_not be_nil
         expect(var.name).to eq("foo")
-        expect(yielded).to be_true
+        expect(yielded).to be_truthy
       end
     end
 
-    describe 'with an event parameter' do 
+    describe 'with an event parameter' do
       let(:event) {Hallmonitor::Event.new("bar")}
-      before do 
+      before do
         expect(Hallmonitor::Outputter).to receive(:output).with(event)
       end
-      
+
       it "should emit the passed in event" do
         subject.emit(event)
       end
