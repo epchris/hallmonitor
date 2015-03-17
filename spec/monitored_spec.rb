@@ -18,15 +18,15 @@ RSpec::Matchers.define :an_event_with_name do |expected_name|
   match { |actual| actual.is_a?(Hallmonitor::Event) && actual.name == expected_name }
 end
 
-RSpec::Matchers.define :a_timed_event_with_name do |expected_name| 
+RSpec::Matchers.define :a_timed_event_with_name do |expected_name|
   match { |actual| actual.is_a?(Hallmonitor::TimedEvent) && actual.name == expected_name }
 end
 
-describe Hallmonitor::Monitored do
+RSpec.describe Hallmonitor::Monitored do
   subject { Thing.new }
 
   describe '#timer_for' do
-    it 'should emit a timer with an appropriate name' do
+    it 'emits a timer with an appropriate name' do
       expect(Hallmonitor::Outputter).to(
         receive(:output).with(a_timed_event_with_name('thing.timer_for_test')))
       Thing.new.timer_for_test
@@ -34,7 +34,7 @@ describe Hallmonitor::Monitored do
   end
 
   describe '#count_for' do
-    it 'should emit an event with an appropriate name' do
+    it 'emits an event with an appropriate name' do
       expect(Hallmonitor::Outputter).to(
         receive(:output).with(an_event_with_name('thing.count_for_test')))
       Thing.new.count_for_test
@@ -44,31 +44,53 @@ describe Hallmonitor::Monitored do
   describe '#watch' do
     let(:retval) { 'Hello World' }
     let(:name) { 'foo' }
-    before do
-      expect(Hallmonitor::Outputter).to receive(:output).with(a_timed_event_with_name(name))
-    end
-    it 'should return the value the block returns' do
+
+    it 'returns the value the block returns' do
       value = subject.watch(name) do
         retval
       end
       expect(value).to eq(retval)
+
+      value = subject.watch(name) do
+        nil
+      end
+      expect(value).to_not be
+    end
+
+    it 'emits a timer event for the block' do
+      expect(Hallmonitor::Outputter).to(
+        receive(:output).with(a_timed_event_with_name(name)))
+      subject.watch(name) do
+        'foo'
+      end
+    end
+
+    describe 'when the block raises an error' do
+      it 'emits a timer for the block' do
+        expect(Hallmonitor::Outputter).to(
+          receive(:output).with(a_timed_event_with_name(name)))
+        expect {
+          subject.watch(name) do
+            raise 'OOPS!'
+          end
+        }.to raise_error
+      end
     end
   end
 
   describe '#emit' do
     describe 'with a string parameter' do
-      let(:name) {"foo"}
-      before do
-        expect(Hallmonitor::Outputter).to receive(:output).with(an_event_with_name(name))
-      end
+      let(:name) { 'foo' }
 
-      it "should emit an event with the passed in name" do
+      it 'emits an event with the passed in name' do
+        expect(Hallmonitor::Outputter).to(
+          receive(:output).with(an_event_with_name(name)))
         subject.emit(name)
       end
     end
 
     describe 'with a block' do
-      it 'should yield to the block' do
+      it 'yields to the block' do
         yielded = false
         var = nil
         subject.emit('foo') do |thing|
@@ -83,11 +105,9 @@ describe Hallmonitor::Monitored do
 
     describe 'with an event parameter' do
       let(:event) { Hallmonitor::Event.new('bar') }
-      before do
-        expect(Hallmonitor::Outputter).to receive(:output).with(event)
-      end
 
-      it 'should emit the passed in event' do
+      it 'emits the passed in event' do
+        expect(Hallmonitor::Outputter).to receive(:output).with(event)
         subject.emit(event)
       end
     end
