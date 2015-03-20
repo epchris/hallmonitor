@@ -4,9 +4,9 @@ module Hallmonitor
   # The event class is a single-fire event
   class Event
     include Hallmonitor::Monitored
-    
+
     attr_accessor :name, :time, :count
-    
+
     def initialize(name, count=1)
       @name = name
       @time = Time.now

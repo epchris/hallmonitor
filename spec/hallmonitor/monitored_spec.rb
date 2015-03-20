@@ -27,7 +27,7 @@ RSpec.describe Hallmonitor::Monitored do
 
   describe '#timer_for' do
     it 'emits a timer with an appropriate name' do
-      expect(Hallmonitor::Outputter).to(
+      expect(Hallmonitor::Dispatcher).to(
         receive(:output).with(a_timed_event_with_name('thing.timer_for_test')))
       Thing.new.timer_for_test
     end
@@ -35,7 +35,7 @@ RSpec.describe Hallmonitor::Monitored do
 
   describe '#count_for' do
     it 'emits an event with an appropriate name' do
-      expect(Hallmonitor::Outputter).to(
+      expect(Hallmonitor::Dispatcher).to(
         receive(:output).with(an_event_with_name('thing.count_for_test')))
       Thing.new.count_for_test
     end
@@ -58,7 +58,7 @@ RSpec.describe Hallmonitor::Monitored do
     end
 
     it 'emits a timer event for the block' do
-      expect(Hallmonitor::Outputter).to(
+      expect(Hallmonitor::Dispatcher).to(
         receive(:output).with(a_timed_event_with_name(name)))
       subject.watch(name) do
         'foo'
@@ -67,7 +67,7 @@ RSpec.describe Hallmonitor::Monitored do
 
     describe 'when the block raises an error' do
       it 'emits a timer for the block' do
-        expect(Hallmonitor::Outputter).to(
+        expect(Hallmonitor::Dispatcher).to(
           receive(:output).with(a_timed_event_with_name(name)))
         expect {
           subject.watch(name) do
@@ -83,7 +83,7 @@ RSpec.describe Hallmonitor::Monitored do
       let(:name) { 'foo' }
 
       it 'emits an event with the passed in name' do
-        expect(Hallmonitor::Outputter).to(
+        expect(Hallmonitor::Dispatcher).to(
           receive(:output).with(an_event_with_name(name)))
         subject.emit(name)
       end
@@ -107,7 +107,7 @@ RSpec.describe Hallmonitor::Monitored do
       let(:event) { Hallmonitor::Event.new('bar') }
 
       it 'emits the passed in event' do
-        expect(Hallmonitor::Outputter).to receive(:output).with(event)
+        expect(Hallmonitor::Dispatcher).to receive(:output).with(event)
         subject.emit(event)
       end
     end

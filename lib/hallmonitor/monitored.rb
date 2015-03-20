@@ -69,7 +69,7 @@ module Hallmonitor
       # If we were given a block, then we want to execute that
       yield(to_emit) if block_given?
 
-      Outputter.output(to_emit)
+      Dispatcher.output(to_emit)
       nil
     end
 
