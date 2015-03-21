@@ -20,8 +20,12 @@ module Hallmonitor
       @outputters = []
     end
 
-    # Outputs the event via each registered outputter
+    # Outputs an event via each registered outputter.
+    # If {Hallmonitor::Configuration} has the option
+    # `trap_outputter_exceptions` set to `true` then this method
+    # will trap and squash any errors raised by the outputter.
     # @param event [Event] The event to output
+    # @return nil
     def self.output(event)
       @outputters.each do |o|
         begin
@@ -30,6 +34,7 @@ module Hallmonitor
           raise unless Hallmonitor.config.trap_outputter_exceptions
         end
       end
+      nil
     end
   end
 end

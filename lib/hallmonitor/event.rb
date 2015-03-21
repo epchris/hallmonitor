@@ -1,12 +1,15 @@
 require 'hallmonitor/monitored'
 module Hallmonitor
-  ##
-  # The event class is a single-fire event
+  # The event class is a single-fire event, it most often
+  # represents a single, countable metric.
   class Event
     include Hallmonitor::Monitored
 
     attr_accessor :name, :time, :count
 
+    # Builds a new event
+    # @param name [String] the name of this event
+    # @param count [Number] the count of this even, defaults to 1
     def initialize(name, count=1)
       @name = name
       @time = Time.now

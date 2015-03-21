@@ -1,7 +1,11 @@
 module Hallmonitor
+  # An {Outputter} is an object that can process {Hallmonitor::Event}s
   class Outputter
     attr_reader :name
 
+    # Initializes a new Outputter
+    # @param name [Object] Probably a string or symbol, the name of this
+    # outputter
     def initialize(name)
       raise(ArgumentError, "Outputter expects a name") if name.nil?
       @name = name

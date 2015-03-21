@@ -53,12 +53,14 @@ module Hallmonitor
       base.extend(ClassMethods)
     end
 
-    # Emits an event: either self or an event if one is passed in, or constructs
-    # a base event from the passed in param
+    # Emits an event: self if the event param is nil, the passed in event if
+    # it's an {Event}, or constructs a {Event} from the passed in param.
+    #
     # If the parameter is a {Hallmonitor::Event}, it will be emitted as is.
     # Otherwise, a new {Hallmonitor::Event} will be created with the parameter
     # and emitted.
     # @param event [Mixed] The thing to emit, see method description
+    # @yield [to_emit] The thing that's going to be emitted
     # @return nil
     def emit(event = nil)
       to_emit = self
@@ -73,9 +75,10 @@ module Hallmonitor
       nil
     end
 
-    # Executes and times a block of code and emits a Hallmonitor::TimedEvent
-    # Will emit even if the block raises an error
+    # Executes and times a block of code and emits a {TimedEvent}
+    # @note Will emit the timed event even if the block raises an error
     # @param name [String] The name of the event to emit
+    # @yield [event] the event object that will be emitted
     # @return Whatever the block's return value is
     def watch(name)
       event = Hallmonitor::TimedEvent.new(name)

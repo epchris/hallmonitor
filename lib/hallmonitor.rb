@@ -12,6 +12,9 @@ module Hallmonitor
     attr_accessor :config
   end
 
+  # Method to configure Hallmonitor, takes a block and passes a
+  # {Hallmonitor::Configuration} object in, which can be used to
+  # set configuration options.
   def self.configure
     self.config ||= Hallmonitor::Configuration.new
     yield(config)
