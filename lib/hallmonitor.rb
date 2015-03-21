@@ -19,4 +19,12 @@ module Hallmonitor
     self.config ||= Hallmonitor::Configuration.new
     yield(config)
   end
+
+  # Adds an outputter to Hallmonitor.  Whenever events are emitted
+  # they will be sent to all registered outputters
+  # @param outputter [Outputter] An instance of an outputter
+  # @note This delegates to {Dispatcher.add_outputter}
+  def self.add_outputter(outputter)
+    Dispatcher.add_outputter(outputter)
+  end
 end

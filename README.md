@@ -9,10 +9,10 @@ Before you can use Hallmonitor you have to do a tiny bit of configuration in the
 
 ```ruby
 # Add an outputter to STDOUT
-Hallmonitor::Dispatcher.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
+Hallmonitor.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
 
 # Add an outputter to StatsD
-Hallmonitor::Dispatcher.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
+Hallmonitor.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
 ```
 
 The `StatsdOutputter` is only available if you've installed the `statsd-ruby` gem.  If it's not available, StatsdOutputter's intitialize method will raise a RuntimeError

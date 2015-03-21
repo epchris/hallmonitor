@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 lib = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -6,8 +8,8 @@ require 'hallmonitor/outputters/iooutputter'
 require 'hallmonitor/outputters/statsd_outputter'
 require 'pry'
 
-Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
-Hallmonitor::Outputter.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "graphite.demo.transis.net")
+Hallmonitor.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
+Hallmonitor.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
 
 class Foo
   include Hallmonitor::Monitored
@@ -30,9 +32,18 @@ class Foo
 
   def time_me
     watch("timed") do |x|
-      sleep(10)
+      sleep(5)
     end
   end
 end
 
-binding.pry
+f = Foo.new
+
+puts 'Calling method with timer_for and count_for...'
+f.do_something
+
+puts 'Emitting some events'
+f.emit_events(5)
+
+puts 'Timing a 5 second block'
+f.time_me
