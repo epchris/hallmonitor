@@ -62,10 +62,10 @@ module Hallmonitor
     # @param event [Mixed] The thing to emit, see method description
     # @yield [to_emit] The thing that's going to be emitted
     # @return nil
-    def emit(event = nil)
+    def emit(event = nil, tags: {})
       to_emit = self
       unless event.nil?
-        to_emit = event.is_a?(Hallmonitor::Event) ? event : Hallmonitor::Event.new(event)
+        to_emit = event.is_a?(Hallmonitor::Event) ? event : Hallmonitor::Event.new(event, tags: tags)
       end
 
       # If we were given a block, then we want to execute that
@@ -80,8 +80,8 @@ module Hallmonitor
     # @param name [String] The name of the event to emit
     # @yield [event] the event object that will be emitted
     # @return Whatever the block's return value is
-    def watch(name)
-      event = Hallmonitor::TimedEvent.new(name)
+    def watch(name, tags: {})
+      event = Hallmonitor::TimedEvent.new(name, tags: tags)
       event.start = Time.now
       begin
         yield(event)

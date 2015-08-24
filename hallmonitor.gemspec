@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("json", [">= 0"])
 
   s.add_development_dependency("statsd-ruby", [">= 0"])
+  s.add_development_dependency("influxdb", ["~> 0.2.2"])
   s.add_development_dependency("rspec", [">= 3.0"])
   s.add_development_dependency("rdoc", [">= 0"])
   s.add_development_dependency("bundler", ["~> 1.3"])

@@ -18,6 +18,10 @@ RSpec::Matchers.define :an_event_with_name do |expected_name|
   match { |actual| actual.is_a?(Hallmonitor::Event) && actual.name == expected_name }
 end
 
+RSpec::Matchers.define :an_event_with_tags do |expected_tags|
+  match { |actual| actual.is_a?(Hallmonitor::Event) && actual.tags == expected_tags}
+end
+
 RSpec::Matchers.define :a_timed_event_with_name do |expected_name|
   match { |actual| actual.is_a?(Hallmonitor::TimedEvent) && actual.name == expected_name }
 end
@@ -65,6 +69,19 @@ RSpec.describe Hallmonitor::Monitored do
       end
     end
 
+    describe 'with tags' do
+      let(:name) { 'foo'}
+      let(:tags) { {'foo': 'bar', 'baz': 6}}
+
+      it 'emits an event with tags' do
+        expect(Hallmonitor::Dispatcher).to(
+          receive(:output).with(an_event_with_tags(tags)))
+        subject.watch(name, tags: tags) do
+          'foo'
+        end
+      end
+    end
+
     describe 'when the block raises an error' do
       it 'emits a timer for the block' do
         expect(Hallmonitor::Dispatcher).to(
@@ -86,6 +103,17 @@ RSpec.describe Hallmonitor::Monitored do
         expect(Hallmonitor::Dispatcher).to(
           receive(:output).with(an_event_with_name(name)))
         subject.emit(name)
+      end
+    end
+
+    describe 'with tags' do
+      let(:name) { 'foo'}
+      let(:tags) { {'foo': 'bar', 'baz': 6}}
+
+      it 'emits an event with tags' do
+        expect(Hallmonitor::Dispatcher).to(
+          receive(:output).with(an_event_with_tags(tags)))
+        subject.emit(name, tags: tags)
       end
     end
 
