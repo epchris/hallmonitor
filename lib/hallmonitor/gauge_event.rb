@@ -6,8 +6,8 @@ module Hallmonitor
   class GaugeEvent < Event
     # @param name [String] Name of this guage
     # @param value [Number] The current value of this guage
-    def initialize(name, value, tags: {})
-      super(name, value, tags: tags)
+    def initialize(name, value: nil, tags: {})
+      super(name, count: value, tags: tags)
     end
 
     # The value of this guage

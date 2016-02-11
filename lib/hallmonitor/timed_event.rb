@@ -10,8 +10,9 @@ module Hallmonitor
 
     # Builds a new {TimedEvent}
     # @param name [String] name of this event
-    # @param duration [Number] the timespan of this event
-    def initialize(name, duration = nil, tags: {})
+    # @param duration [Number, Hash] the timespan of this event, or multiple named
+    #   timestamps
+    def initialize(name, duration: nil, tags: {})
       super(name, tags: tags)
       @duration = duration
     end

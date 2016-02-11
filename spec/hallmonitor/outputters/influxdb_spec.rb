@@ -49,7 +49,7 @@ module Hallmonitor
         end
 
         context 'with a timer event' do
-          let(:event) { Hallmonitor::TimedEvent.new(event_name, 100, tags: tags) }
+          let(:event) { Hallmonitor::TimedEvent.new(event_name, duration: 100, tags: tags) }
           let(:expected_value) { event.duration }
           let(:expected_type) { 'timer' }
           it 'sends the correct information to influxdb' do
@@ -60,7 +60,7 @@ module Hallmonitor
         end
 
         context 'with a gauge event' do
-          let(:event) { Hallmonitor::GaugeEvent.new(event_name, 100, tags: tags) }
+          let(:event) { Hallmonitor::GaugeEvent.new(event_name, value: 100, tags: tags) }
           let(:expected_value) { event.value }
           let(:expected_type) { 'gauge' }
           it 'sends the correct information to influxdb' do

@@ -9,9 +9,10 @@ module Hallmonitor
 
     # Builds a new event
     # @param name [String] the name of this event
-    # @param count [Number] the count of this even, defaults to 1
+    # @param count [Number,Hash] the count of this even, defaults to 1.  Can
+    #   also be a hash of named value pairs
     # @param tags [Hash<Symbol,String>] Hash of tags to values for this event
-    def initialize(name, count = 1, tags: {})
+    def initialize(name, count: 1, tags: {})
       @name = name
       @time = Time.now
       @count = count

@@ -40,9 +40,9 @@ module Hallmonitor
       # @param evvent []
       def process(event)
         data =
-          if event.respond_to?(:duration)
+          if event.is_a?(Hallmonitor::TimedEvent)
             build_timer_data(event)
-          elsif event.respond_to?(:value)
+          elsif event.is_a?(Hallmonitor::GaugeEvent)
             build_gauge_data(event)
           else
             build_counter_data(event)
@@ -74,10 +74,16 @@ module Hallmonitor
       end
 
       def build_data(event, type, value)
-        {
-          tags: @tags.merge(event.tags.merge(type: type)),
-          values: { value: value }
+        data = {
+          tags: @tags.merge(event.tags.merge(type: type))
         }
+
+        if value.is_a?(Hash)
+          data[:values] = value
+        else
+          data[:values] = { value: value }
+        end
+        data
       end
 
       def build_timer_data(event)
