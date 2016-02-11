@@ -24,14 +24,15 @@ module Hallmonitor
       end
 
       describe 'with exception trapping turned off' do
+        let(:error) { "FOOO" }
         before do
-          allow(outputter).to receive(:process).and_raise("FOOOOO")
+          allow(outputter).to receive(:process).and_raise(error)
           Hallmonitor.configure do |c|
             c.trap_outputter_exceptions = false
           end
         end
         it 'raises outputter exceptions' do
-          expect{Dispatcher.output("thing")}.to raise_error
+          expect { Dispatcher.output("thing") }.to raise_error(error)
         end
       end
 

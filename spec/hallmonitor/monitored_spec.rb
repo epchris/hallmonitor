@@ -86,11 +86,11 @@ RSpec.describe Hallmonitor::Monitored do
       it 'emits a timer for the block' do
         expect(Hallmonitor::Dispatcher).to(
           receive(:output).with(a_timed_event_with_name(name)))
-        expect {
+        expect do
           subject.watch(name) do
-            raise 'OOPS!'
+            fail 'OOPS!'
           end
-        }.to raise_error
+        end.to raise_error('OOPS!')
       end
     end
   end

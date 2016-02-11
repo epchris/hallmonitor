@@ -7,7 +7,7 @@ module Hallmonitor
     # @param name [Object] Probably a string or symbol, the name of this
     # outputter
     def initialize(name)
-      raise(ArgumentError, "Outputter expects a name") if name.nil?
+      fail(ArgumentError, 'Outputter expects a name') if name.nil?
       @name = name
     end
 
