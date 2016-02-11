@@ -3,7 +3,7 @@ require 'hallmonitor/outputters/influxdb'
 
 module Hallmonitor
   module Outputters
-    RSpec.describe InfluxdbOutputter do
+    RSpec.describe Influxdb do
       let(:influxdb_client) { nil }
       let(:default_tags) { {} }
       let(:outputter) { described_class.new(influxdb_client, default_tags) }

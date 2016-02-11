@@ -2,7 +2,8 @@
 
 Hallmonitor is a simple event monitoring framework for Ruby.  It allows programs to define and emit events. These events can then be sent on to various back ends to be counted, monitored, etc.
 
-Hallmonitor includes support for publishing events to a Statsd instance if the `statsd-ruby` gem is installed.  See https://github.com/reinh/statsd for details
+Hallmonitor includes support for publishing events to a Statsd instance if the `statsd-ruby` gem is installed.  See https://github.com/reinh/statsd for details.
+It also includes support for outputting events to InfluxDB if the 'influxdb' gem is installed.
 
 ## Setup
 Before you can use Hallmonitor you have to do a tiny bit of configuration in the form of adding outputters.

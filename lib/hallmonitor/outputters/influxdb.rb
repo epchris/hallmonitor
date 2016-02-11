@@ -6,8 +6,8 @@ end
 module Hallmonitor
   module Outputters
     # An outputter for InfluxDB
-    class InfluxdbOutputter < Outputter
-      # Builds a new InfluxdbOutputter
+    class Influxdb < Outputter
+      # Builds a new Influxdb outputter
       # @param influxdb_client [InfluxDB::Client] client instance to use
       # @param tags [Hash] Set of default tags applied to all events output to
       #   InfluxDB, will be overridden by tags set by events if they conflict

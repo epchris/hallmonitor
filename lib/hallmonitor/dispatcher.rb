@@ -31,7 +31,7 @@ module Hallmonitor
         begin
           o.process(event)
         rescue
-          raise unless Hallmonitor.config.trap_outputter_exceptions
+          raise unless Hallmonitor.config && Hallmonitor.config.trap_outputter_exceptions
         end
       end
       nil
