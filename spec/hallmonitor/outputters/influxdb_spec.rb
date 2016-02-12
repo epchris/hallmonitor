@@ -11,7 +11,7 @@ module Hallmonitor
       context '#initialize' do
         context 'with a bad influxdb client' do
           it 'raises an error' do
-            expect { outputter }.to raise_error(String)
+            expect { outputter }.to raise_error
           end
         end
 
