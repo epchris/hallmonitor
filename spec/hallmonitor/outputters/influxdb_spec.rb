@@ -70,22 +70,31 @@ module Hallmonitor
           end
         end
 
-        context 'with a name transformer' do
-          let(:transformer) { double('name_transformer') }
+        context 'with a transformer' do
+          let(:transformer) { double('transformer') }
           let(:outputter) do
             described_class.new(influxdb_client, default_tags, transformer)
+          end
+
+          let(:expected_data) do
+            {
+              values: { value: expected_value },
+              tags: { additional: 'foo' }
+            }
           end
 
           it 'builds event information using the transformer' do
             expect(transformer).to(
               receive(:transform)
-              .with(event.name)
-              .and_return(
-                name: 'foo',
-                tags: { additional: 'foo' }
-              )
+                .with(event, anything)
+                .and_return(
+                  Influxdb::EventData.new(
+                    'foo',
+                    { additional: 'foo' },
+                    value: 1
+                  )
+                )
             )
-            expected_data[:tags][:additional] = 'foo'
             expect(influxdb_client).to(
               receive(:write_point).with('foo', expected_data))
             outputter.process(event)
