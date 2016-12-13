@@ -1,3 +1,8 @@
+# Version 4.0.0
+- Changed initializer signature for InfluxDB outputter to use
+  keyword args.
+- Added `attr_accessor` for InfluxDB Outputter's transformer
+
 # Version 3.0.0
 - Refactored the Transformer concept in the InfluxDB outputter so that
   it is more flexible. This was in response to the InfluxDB client gem

@@ -6,7 +6,7 @@ module Hallmonitor
     RSpec.describe Influxdb do
       let(:influxdb_client) { nil }
       let(:default_tags) { {} }
-      let(:outputter) { described_class.new(influxdb_client, default_tags) }
+      let(:outputter) { described_class.new(influxdb_client, tags: default_tags) }
 
       context '#initialize' do
         context 'with a bad influxdb client' do
@@ -73,7 +73,7 @@ module Hallmonitor
         context 'with a transformer' do
           let(:transformer) { double('transformer') }
           let(:outputter) do
-            described_class.new(influxdb_client, default_tags, transformer)
+            described_class.new(influxdb_client, tags: default_tags, transformer: transformer)
           end
 
           let(:expected_data) do

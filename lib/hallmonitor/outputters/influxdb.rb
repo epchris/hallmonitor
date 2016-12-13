@@ -10,6 +10,10 @@ module Hallmonitor
       # Simple EventData struct, used to communicate with an optional Transformer
       EventData = Struct.new(:name, :tags, :fields)
 
+      # @return [#transform(Event, EventData)] Object used to transform data
+      #   before it is sent to InfluxDB
+      attr_accessor :transformer
+
       # Builds a new Influxdb outputter
       # @param influxdb_client [InfluxDB::Client] client instance to use
       # @param tags [Hash] Set of default tags applied to all events output to
@@ -22,7 +26,7 @@ module Hallmonitor
       #   before it is written out to InfluxDB
       # @raise if influxdb_client does not respond to :write_point
       #   (InfluxDB::Client contract)
-      def initialize(influxdb_client, tags = {}, transformer = nil)
+      def initialize(influxdb_client, tags: {}, transformer: nil)
         unless influxdb_client.respond_to?(:write_point)
           raise 'Supplied InfluxDB Client was not as expected'
         end
