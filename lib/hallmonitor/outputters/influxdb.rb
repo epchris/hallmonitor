@@ -8,7 +8,18 @@ module Hallmonitor
     # An outputter for InfluxDB
     class Influxdb < Outputter
       # Simple EventData struct, used to communicate with an optional Transformer
-      EventData = Struct.new(:name, :tags, :fields)
+      EventData = Struct.new(:name, :tags, :fields, :timestamp)
+
+      # Maps Influxdb client precisions to multipliers for Time#to_r to get
+      # the value to send to influxdb for the timestamp
+      PRECISION_MAP = {
+        'ns' => 10**9,
+        'u' => 10**6,
+        'ms' => 10**3,
+        's' => 1,
+        'm' => 1 / 60,
+        'h' => 1 / 3600
+      }.freeze
 
       # @return [#transform(Event, EventData)] Object used to transform data
       #   before it is sent to InfluxDB
@@ -39,6 +50,7 @@ module Hallmonitor
         @tags = {}.merge(tags)
         @client = influxdb_client || raise('Must supply an InfluxDb client')
         @transformer = transformer
+        @precision_mult = PRECISION_MAP[@client.config.time_precision || 's']
       end
 
       # Sends events to InfluxDB instance
@@ -54,7 +66,7 @@ module Hallmonitor
       # @param data [EventData] Struct of data we're building for InfluxDB
       def transform_and_write(event, event_data)
         event_data = @transformer.transform(event, event_data) if @transformer
-        data = { tags: event_data.tags, values: event_data.fields }
+        data = { tags: event_data.tags, values: event_data.fields, timestamp: event_data.timestamp }
         @client.write_point(event_data.name, data)
       end
 
@@ -75,7 +87,15 @@ module Hallmonitor
         data.name = event.name
         data.tags = @tags.merge(event.tags.merge(type: type))
         data.fields = value.is_a?(Hash) ? value : { value: value }
+        data.timestamp = calc_timestamp(event)
         data
+      end
+
+      # Calculates a timestamp based on the indicated {Time} object
+      # and the influxdb client's precision
+      # @param event [Hallmonitor::Event]
+      def calc_timestamp(event)
+        (event.time.to_r * @precision_mult).to_i if event.time.respond_to?(:to_r)
       end
 
       def build_timer_data(event)

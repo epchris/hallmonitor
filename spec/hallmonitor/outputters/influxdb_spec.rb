@@ -6,7 +6,9 @@ module Hallmonitor
     RSpec.describe Influxdb do
       let(:influxdb_client) { nil }
       let(:default_tags) { {} }
-      let(:outputter) { described_class.new(influxdb_client, tags: default_tags) }
+      let(:outputter) do
+        described_class.new(influxdb_client, tags: default_tags)
+      end
 
       context '#initialize' do
         context 'with a bad influxdb client' do
@@ -16,9 +18,13 @@ module Hallmonitor
         end
 
         context 'with a good client' do
-          let(:influxdb_client) { double('influxdb_client') }
+          let(:influxdb_client) { instance_double(InfluxDB::Client) }
           before do
             allow(influxdb_client).to receive(:write_point)
+            allow(influxdb_client).to(
+              receive(:config)
+                .and_return(double(time_precision: 'ms'))
+            )
           end
 
           it 'does not raise an error' do
@@ -38,8 +44,16 @@ module Hallmonitor
         let(:expected_data) do
           {
             values: { value: expected_value },
-            tags: default_tags.merge(tags).merge(type: expected_type)
+            tags: default_tags.merge(tags).merge(type: expected_type),
+            timestamp: a_value_within(1000).of((Time.now.to_r * 10**3).to_i)
           }
+        end
+
+        before do
+          allow(influxdb_client).to(
+            receive(:config)
+              .and_return(double(time_precision: 'ms'))
+          )
         end
 
         it 'sends the correct information to influxdb' do
@@ -79,7 +93,8 @@ module Hallmonitor
           let(:expected_data) do
             {
               values: { value: expected_value },
-              tags: { additional: 'foo' }
+              tags: { additional: 'foo' },
+              timestamp: nil
             }
           end
 
