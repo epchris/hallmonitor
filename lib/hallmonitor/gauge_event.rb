@@ -1,6 +1,6 @@
 module Hallmonitor
-  # A Guage event is an event that has a specific value,
-  # think of it like a tachometer or gas guage on a car:
+  # A Gauge event is an event that has a specific value,
+  # think of it like a tachometer or gas gauge on a car:
   # at any given point it reports the current value of a
   # variable.
   class GaugeEvent < Event
