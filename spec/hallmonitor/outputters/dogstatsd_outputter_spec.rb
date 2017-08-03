@@ -19,21 +19,22 @@ module Hallmonitor
 
       context '#process' do
         let(:event_name) { 'foo.bar.baz' }
-        let(:event_tags) { {:tags=>[]} }
+        let(:event_tags) { {:tags=>[{:foo=>"bar"}]} }
+        let(:event_tags_expected) {{:tags=>["tags:[{:foo=>\"bar\"}]"]}}
         context 'with an event' do
-          let(:event) { Event.new(event_name) }
+          let(:event) { Event.new(name = event_name, tags: event_tags) }
 
           it 'sends the event to statsd' do
-            expect(dogstatsd_client).to receive(:count).with(event_name, event.count, event_tags)
+            expect(dogstatsd_client).to receive(:count).with(event_name, event.count, event_tags_expected)
             outputter.process(event)
           end
 
           context 'that has multiple values' do
             let(:values) { { foo: 1, bar: 2 } }
-            let(:event) { Event.new(event_name, count: values) }
+            let(:event) { Event.new(event_name, count: values, tags: event_tags) }
             it 'sends multiple events to statsd' do
-              expect(dogstatsd_client).to receive(:count).with("#{event_name}.foo", event.count[:foo], event_tags)
-              expect(dogstatsd_client).to receive(:count).with("#{event_name}.bar", event.count[:bar], event_tags)
+              expect(dogstatsd_client).to receive(:count).with("#{event_name}.foo", event.count[:foo], event_tags_expected)
+              expect(dogstatsd_client).to receive(:count).with("#{event_name}.bar", event.count[:bar], event_tags_expected)
               outputter.process(event)
             end
           end
