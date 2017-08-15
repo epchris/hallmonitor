@@ -29,12 +29,7 @@ module Hallmonitor
       # in the hash
 
       def process_tags(tags)
-        @tags = @tags.merge(tags)
-        tags_array = Array.new
-        for k,v in @tags
-          tags_array.push("#{k}:#{v}")
-        end
-        return tags_array
+        @tags.merge(tags).map {|key, value| "#{key}:#{value}"}
       end
 
       def process(event)
@@ -53,10 +48,10 @@ module Hallmonitor
         event_name = name_for(event)
         if event.duration.is_a?(Hash)
           event.duration.each do |name, value|
-            @statsd.timing("#{event_name}.#{name}", value, :tags => process_tags(event.tags))
+            @statsd.timing("#{event_name}.#{name}", value, tags: process_tags(event.tags))
           end
         else
-          @statsd.timing(event_name, event.duration)
+          @statsd.timing(event_name, event.duration, tags: process_tags(event.tags))
         end
       end
 
@@ -64,10 +59,10 @@ module Hallmonitor
         event_name = name_for(event)
         if event.value.is_a?(Hash)
           event.value.each do |name, value|
-            @statsd.gauge("#{event_name}.#{name}", value, :tags => process_tags(event.tags))
+            @statsd.gauge("#{event_name}.#{name}", value, tags: process_tags(event.tags))
           end
         else
-          @statsd.gauge(event_name, event.value, :tags => process_tags(event.tags))
+          @statsd.gauge(event_name, event.value, tags: process_tags(event.tags))
         end
       end
 
@@ -75,10 +70,10 @@ module Hallmonitor
         event_name = name_for(event)
         if event.count.is_a?(Hash)
           event.count.each do |name, value|
-            @statsd.count("#{event_name}.#{name}", value, :tags => process_tags(event.tags))
+            @statsd.count("#{event_name}.#{name}", value, tags: process_tags(event.tags))
           end
         else
-          @statsd.count(event_name, event.count, :tags => process_tags(event.tags))
+          @statsd.count(event_name, event.count, tags: process_tags(event.tags))
         end
       end
 
