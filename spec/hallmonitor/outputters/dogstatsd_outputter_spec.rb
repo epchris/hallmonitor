@@ -19,8 +19,8 @@ module Hallmonitor
 
       context '#process' do
         let(:event_name) { 'foo.bar.baz' }
-        let(:event_tags) { {:tags=>[{:foo=>"bar"}]} }
-        let(:event_tags_expected) {{:tags=>["tags:[{:foo=>\"bar\"}]"]}}
+        let(:event_tags) { {tags: [{foo:"bar"}]} }
+        let(:event_tags_expected) {{tags:["tags:[{:foo=>\"bar\"}]"]}}
         context 'with an event' do
           let(:event) { Event.new(name = event_name, tags: event_tags) }
 
