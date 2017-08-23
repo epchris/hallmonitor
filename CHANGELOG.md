@@ -1,3 +1,6 @@
+# Verison 4.2.0
+- Added Dogstatsd outputter, thanks to mlahaye
+
 # Version 4.0.0
 - Changed initializer signature for InfluxDB outputter to use
   keyword args.
