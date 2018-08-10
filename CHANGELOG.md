@@ -1,3 +1,11 @@
+# Version 5.0.0
+## Breaking changes
+- Renamed `Hallmonitor::Outputters::DogstatsdOutputter` to
+  `Hallmonitor::Outputters::Dogstatsd`
+- Changed initialization parameters to `Dogstatsd` to take in a
+  `Datadog::Statsd` instance instead of initializing one
+- Changed visibility of the `Dogstatsd#process_tags` method to private
+
 # Verison 4.2.0
 - Added Dogstatsd outputter, thanks to mlahaye
 

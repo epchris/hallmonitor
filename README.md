@@ -2,21 +2,32 @@
 
 Hallmonitor is a simple event monitoring framework for Ruby.  It allows programs to define and emit events. These events can then be sent on to various back ends to be counted, monitored, etc.
 
-Hallmonitor includes support for publishing events to a Statsd instance if the `statsd-ruby` gem is installed.  See https://github.com/reinh/statsd for details.
-It also includes support for outputting events to InfluxDB if the 'influxdb' gem is installed.
+Hallmonitor includes support for the following outputters:
+
+- [Statsd](https://github.com/reinh/statsd) - Requires the `statsd` gem to be installed
+- [InfluxDB](https://github.com/influxdata/influxdb-ruby) - Requires the `influxdb` gem to be installed
+- [Datadog](https://github.com/DataDog/dogstatsd-ruby) - Requires the `dogstatsd-ruby` gem to be installed
+- IOOutputter - Simple outputter that outputs to an IO object
+- [NewRelic](https://github.com/newrelic/rpm) - Requires the `newrelic_rpm` gem to be installed
+
 
 ## Setup
 Before you can use Hallmonitor you have to do a tiny bit of configuration in the form of adding outputters.
 
 ```ruby
 # Add an outputter to STDOUT
+require 'hallmonitor/outputters/iooutputter.rb'
 Hallmonitor.add_outputter Hallmonitor::Outputters::IOOutputter.new("STDOUT", STDOUT)
 
 # Add an outputter to StatsD
+require 'hallmonitor/outputters/statsd_outputter'
 Hallmonitor.add_outputter Hallmonitor::Outputters::StatsdOutputter.new("example", "localhost")
-```
 
-The `StatsdOutputter` is only available if you've installed the `statsd-ruby` gem.  If it's not available, StatsdOutputter's intitialize method will raise a RuntimeError
+# Add an outputter to Datadog
+require 'hallmonitor/outputters/datadog
+datadog = Datadog::Statsd.new
+Hallmonitor.add_outputter Hallmonitor::Outputters::Datadog.new(datadog)
+```
 
 ## Configuration
 Right now there's only one configuration option and here's how you can set it:
@@ -90,5 +101,5 @@ event.emit
 
 ## Copyright
 
-Copyright (c) 2012-2015 Chris TenHarmsel. See LICENSE.txt for
+Copyright (c) 2012-2018 Chris TenHarmsel. See LICENSE.txt for
 further details.
