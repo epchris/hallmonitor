@@ -11,6 +11,9 @@
 - Changed `Hallmonitor::Monitored` so that when included it instructs
   the including class to also extend the module so that class-level
   `emit` and `watch` methods are available
+## Other Changes
+- `Hallmonitor::TimedEvent#to_json` now includes tags
+- `Hallmonitor::GaugeEvent` now implements `to_json`
 
 # Verison 4.2.0
 - Added Dogstatsd outputter, thanks to mlahaye

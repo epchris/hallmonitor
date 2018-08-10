@@ -21,5 +21,13 @@ module Hallmonitor
       self.count = new_value
     end
 
+    def to_json(*a)
+      {
+        name: name,
+        time: time,
+        value: count,
+        tags: tags
+      }.to_json(*a)
+    end
   end
 end

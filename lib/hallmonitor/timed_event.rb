@@ -36,11 +36,12 @@ module Hallmonitor
 
     def to_json(*a)
       {
-        name: @name,
-        time: @time,
+        name: name,
+        time: time,
         start: @start,
         stop:  @stop,
-        duration: duration
+        duration: duration,
+        tags: tags
       }.to_json(*a)
     end
   end
