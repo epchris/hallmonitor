@@ -5,6 +5,12 @@
 - Changed initialization parameters to `Dogstatsd` to take in a
   `Datadog::Statsd` instance instead of initializing one
 - Changed visibility of the `Dogstatsd#process_tags` method to private
+- Changed `Hallmonitor::Monitored#timer_for`
+  and`Hallmonitor::Monitored#count_for` so that they use kwargs and
+  support specifying tags
+- Changed `Hallmonitor::Monitored` so that when included it instructs
+  the including class to also extend the module so that class-level
+  `emit` and `watch` methods are available
 
 # Verison 4.2.0
 - Added Dogstatsd outputter, thanks to mlahaye
