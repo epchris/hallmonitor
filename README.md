@@ -30,22 +30,49 @@ Hallmonitor.add_outputter Hallmonitor::Outputters::Datadog.new(datadog)
 ```
 
 ## Configuration
-Right now there's only one configuration option and here's how you can set it:
+There are a few configuration options, two of which are only
+applicable when used within rails.  You can configure their values like so:
 
 ```ruby
 # Configure Hallmonitor
 Hallmonitor.config |config|
   config.trap_outputter_exceptions = true # Default value is false
+  config.instrument_rails_controller_actions = true # Default value is false
+  config.controller_action_measure_name = 'controller.action.measure' # this is the default
+  config.controller_action_count_name = 'controller.action.count' # this is the default
 end
 ```
 
-**trap_outputter_exceptions:** instructs the output framework to ignore and squash any exceptions that might be raised from inside an outputter.  This can be useful if you want to configure multiple outputter and not have a misbehaving one interrupt other outputter, or your system.
+* **trap_outputter_exceptions:** instructs the output framework to ignore and squash any exceptions that might be raised from inside an outputter.  This can be useful if you want to configure multiple outputter and not have a misbehaving one interrupt other outputter, or your system.
+* **instrument_rails_controller_actions:** Whether or not to auto instrument rails controller actions, defaults to false
+* **controller_action_measure_name:** the metric name to use for the auto-instrumented metric for rails actions that include time measurements
+* **controller_action_count_name:** the metric name to use for the auto-instrumented metric for rails actions that tracks action invocation counts
 
 ## Usage
 
 There are a few different ways to use Hallmonitor:
 
+## Rails Autoinstrumentation
+
+If `config.instrument_rails_controller_actions` is true, and Rails is
+defined Hallmonitor will define a Railtie that auto-instruments all
+rails controller actions to collect execution duration and count
+information.  You can see details of the metrics gathered in the
+`hallmonitor/railtie.rb` file.
+
+You can configure the metric names that are used via the
+`config.controller_action_measure_name` and
+`config.controller_action_count_name` configuration directives.
+
+
 ### Included in your class
+
+The easiest way is to include `Hallmonitor::Monitored` in your class
+and use its `emit(...)` and `watch(...)` methods.  `emit` emits a
+single count metric with a name and optional tags, while `watch`
+executes the provided block and emits a `Hallmonitor::TimedEvent` with
+the duration that the block took to execute.
+
 ```ruby
 class Foo
   # Monitored adds a few methods you can use, like emit(...) and watch(...)
@@ -53,7 +80,6 @@ class Foo
 
   # This method will emit 100 events
   def bar
-
     # Emit 100 events.  The string will be the name of the Event object that gets emitted
     100.times do
       emit("event") # Will emit a new Event with the name 'event'
@@ -82,16 +108,19 @@ foo.time_me # Will emit a single TimedEvent
 ```
 
 ### Explicit Event objects
+
+You can also construct and manually emit a `Hallmonitor::Event` object
+if you need to:
+
 ```ruby
-# Event objects include Hallmonitor::Monitored and so they have
-# an emit method of their own
 event = Hallmonitor::Event.new("event")
 event.emit
 ```
 
 ## Contributing to Hallmonitor
 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
+* Check out the latest master to make sure the feature hasn't been
+  implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
 * Fork the project.
 * Start a feature/bugfix branch.
