@@ -56,8 +56,8 @@ module Hallmonitor
       rails_payload = args[4]
 
       parsed_arguments[:total_duration] = 1000.0 * (args[2] - args[1])
-      parsed_arguments[:view_time] = rails_payload[:view_runtime] || 0
-      parsed_arguments[:db_time] = rails_payload[:db_runtime] || 0
+      parsed_arguments[:view_time] = (rails_payload[:view_runtime] || 0).to_f
+      parsed_arguments[:db_time] = (rails_payload[:db_runtime] || 0).to_f
       parsed_arguments[:status] = rails_payload[:status]
       parsed_arguments[:controller] = rails_payload[:controller]
       parsed_arguments[:action] = rails_payload[:action]

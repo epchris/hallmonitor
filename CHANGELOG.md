@@ -1,5 +1,10 @@
 # Version 5.1.0
 ## Changes
+- Rails instrumentation values for controller durations are now always
+  floats
+
+# Version 5.1.0
+## Changes
 - Introduced Rails autoinstrumentation for Controller Actions.  Only
   applied if Rails is present and the configuration parameter
   `instrument_rails_controller_actions` is set to true.
